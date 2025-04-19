@@ -38,6 +38,12 @@ if (!$product) {
             padding: 0;
         }
 
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
 
         .form-container {
             max-width: 800px;
@@ -79,8 +85,11 @@ if (!$product) {
 </head>
 
 <body>
+    <div class="header">
+        <h1>Update Products</h1>
+    </div>
     <div class="form-container">
-        <h2>Edit Product</h2>
+
         <form action="update_product_action.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?= $product['id'] ?>">
 
