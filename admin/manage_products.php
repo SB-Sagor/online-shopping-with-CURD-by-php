@@ -18,6 +18,7 @@ $products = $stmt->fetchAll();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Manage Products</title>
@@ -40,10 +41,11 @@ $products = $stmt->fetchAll();
             width: 100%;
             background: white;
             border-collapse: collapse;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px;
             border: 1px solid #ddd;
             text-align: center;
@@ -90,7 +92,7 @@ $products = $stmt->fetchAll();
             display: inline-block;
             margin-bottom: 20px;
             text-decoration: none;
-            color:rgb(27, 161, 6);
+            color: rgb(27, 161, 6);
             font-weight: bold;
         }
 
@@ -99,6 +101,7 @@ $products = $stmt->fetchAll();
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <h2>Manage Products</h2>
@@ -131,9 +134,12 @@ $products = $stmt->fetchAll();
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
-                <tr><td colspan="5">No products found.</td></tr>
+                <tr>
+                    <td colspan="5">No products found.</td>
+                </tr>
             <?php endif; ?>
         </tbody>
     </table>
 </body>
+
 </html>

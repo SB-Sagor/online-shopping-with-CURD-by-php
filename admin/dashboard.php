@@ -123,6 +123,17 @@ $categories = $stmt->fetchAll();
             background: linear-gradient(135deg, #2e7d32, #00c853);
             transform: scale(1.01);
         }
+        .back-link {
+            display: inline-block;
+            padding: 5px 20px;
+            text-decoration: none;
+            color: rgb(27, 161, 6);
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -130,6 +141,7 @@ $categories = $stmt->fetchAll();
     <div class="header">
         <h1>Admin Dashboard</h1>
     </div>
+    <a class="back-link" href="../shop.php">← Back to Shop</a>
     <div class="container">
         <h2>Welcome, <?php echo htmlspecialchars($_SESSION['admin']); ?>!</h2>
         <div class="menu">

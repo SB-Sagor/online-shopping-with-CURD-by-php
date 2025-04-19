@@ -100,7 +100,7 @@ if (!$product) {
     <div class="header">
         <h1>Update Products</h1>
     </div>
-    <a class="back-link" href="dashboard.php">← Back to Dashboard</a>
+    <a class="back-link" href="manage_products.php">← Back to Manage</a>
 
     <div class="form-container">
         <form action="update_product_action.php" method="POST" enctype="multipart/form-data">
