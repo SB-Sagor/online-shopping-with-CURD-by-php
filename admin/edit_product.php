@@ -27,44 +27,57 @@ if (!$product) {
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Edit Product</title>
     <style>
         body {
-            font-family: Arial;
+            font-family: Arial, sans-serif;
             background: #f4f4f4;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
         }
+
 
         .form-container {
+            max-width: 800px;
+            margin: 20px auto;
             background: white;
             padding: 20px;
-            max-width: 600px;
-            margin: auto;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
+        input,
+        select,
+        textarea {
             margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 96%;
         }
 
         button {
-            padding: 10px 20px;
-            background: #28a745;
+            padding: 10px 30px;
+            background: linear-gradient(135deg, #00c853, #2e7d32);
             color: white;
             border: none;
-            font-weight: bold;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
 
         button:hover {
-            background: #218838;
+            background: linear-gradient(135deg, #2e7d32, #00c853);
+            transform: scale(1.01);
         }
     </style>
 </head>
+
 <body>
     <div class="form-container">
         <h2>Edit Product</h2>
@@ -95,8 +108,13 @@ if (!$product) {
             <label>Description:</label>
             <textarea name="description"><?= htmlspecialchars($product['description']) ?></textarea>
 
-            <button type="submit">Update Product</button>
+            <div style="text-align: center;">
+                <button type="submit">
+                    🖊️ Update Product
+                </button>
+            </div>
         </form>
     </div>
 </body>
+
 </html>

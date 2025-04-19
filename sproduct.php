@@ -2,29 +2,42 @@
 require 'config.php';
 
 if (isset($_GET['product_id'])) {
-    $productId = intval($_GET['product_id']);
-    // Updated SQL query to fetch category_name
-    $stmt = $pdo->prepare("
+  $productId = intval($_GET['product_id']);
+
+  // Get current product info with category
+  $stmt = $pdo->prepare("
         SELECT products.*, categories.name AS category_name 
         FROM products 
         LEFT JOIN categories ON products.category_id = categories.id 
         WHERE products.id = ?
     ");
-    $stmt->execute([$productId]);
-    $product = $stmt->fetch();
+  $stmt->execute([$productId]);
+  $product = $stmt->fetch();
 
-    // Fetch sub-images
-    $subImagesStmt = $pdo->prepare("SELECT image FROM product_images WHERE product_id = ?");
-    $subImagesStmt->execute([$productId]);
-    $subImages = $subImagesStmt->fetchAll();
+  // Fetch sub-images
+  $subImagesStmt = $pdo->prepare("SELECT image FROM product_images WHERE product_id = ?");
+  $subImagesStmt->execute([$productId]);
+  $subImages = $subImagesStmt->fetchAll();
 
-    if (!$product) {
-        die("Product not found!");
-    }
+  // ✅ Add this block to fetch other products for "Featured Products" section
+  $featuredStmt = $pdo->prepare(
+    "
+    SELECT * FROM products 
+    WHERE id != ? 
+    LIMIT 4"
+  );
+
+  $featuredStmt->execute([$productId]);
+  $products = $featuredStmt->fetchAll();
+
+  if (!$product) {
+    die("Product not found!");
+  }
 } else {
-    die("No product ID provided.");
+  die("No product ID provided.");
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -36,24 +49,145 @@ if (isset($_GET['product_id'])) {
   <title><?= htmlspecialchars($product['name']) ?> - Certainmen</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    /* Responsive navbar */
+    .hamburger {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
 
+    .drawer {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: -250px;
+      height: 100%;
+      width: 250px;
+      background-color: #fff;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+      transition: right 0.3s ease;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .drawer ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .drawer ul li {
+      margin: 20px 0;
+    }
+
+    .drawer ul li a {
+      text-decoration: none;
+      color: #333;
+      font-size: 18px;
+    }
+
+    .drawer.open {
+      right: 0;
+    }
+
+    /* Responsive rules */
+    @media (max-width: 768px) {
+      .filter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1rem;
+        border-radius: 8px;
+      }
+
+      .filter-group {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.3rem;
+      }
+
+      .filter-group label {
+        font-weight: bold;
+        font-size: 12px;
+        color: #333;
+      }
+
+      .filter-group select {
+        padding: 0.2rem;
+        font-size: 12px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: border-color 0.3s ease;
+      }
+
+      .filter-group select:hover {
+        border-color: rgb(11, 207, 4);
+      }
+
+      button.normal {
+        background-color: rgb(8, 147, 27);
+        color: white;
+        border: none;
+        padding: 0.3rem 0.5rem;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      button.normal:hover {
+        background-color: rgb(10, 204, 42);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      #navbar {
+        display: none;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      .drawer {
+        display: block;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <!-- Header -->
+  <!-- Header Section -->
   <section id="header">
-    <a href="#"><img src="img/logo.png" class="logo" alt="Logo" height="60" width="100" /></a>
-    <div>
-      <ul id="navbar">
-        <li><a href="index.html">Home</a></li>
-        <li><a class="active" href="shop.php">Shop</a></li>
-        <li><a href="category.html">Category</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="cart.html"><i class="fa-solid fa-bag-shopping"></i></a></li>
-      </ul>
+    <a href="#"><img src="img/logo.png" class="logo" alt="Certainmen Logo" height="60" width="100" /></a>
+
+    <!-- Hamburger menu for small screens -->
+    <div class="hamburger" onclick="toggleDrawer()">
+      <i class="fas fa-bars"></i>
     </div>
+
+    <!-- Normal navbar for large screens -->
+    <ul id="navbar">
+      <li><a href="index.php">Home</a></li>
+      <li><a class="active" href="shop.php">Shop</a></li>
+      <li><a href="#"><i class="fa-solid fa-bag-shopping"></i></a></li>
+    </ul>
   </section>
+
+  <!-- Drawer menu for mobile -->
+  <div id="drawer" class="drawer">
+    <ul>
+      <li><a href="index.php">Home</a></li>
+      <li><a class="active" href="shop.php">Shop</a></li>
+      <li><a href="#">Cart</a></li>
+    </ul>
+  </div>
+
 
   <!-- Product Details -->
   <section id="prodetails" class="section-p1">
@@ -86,30 +220,30 @@ if (isset($_GET['product_id'])) {
       <span><?= htmlspecialchars($product['description']) ?></span>
     </div>
   </section>
+
   <!-- Featured Products Section -->
   <section id="product1" class="section-p1">
     <h2>Featured Products</h2>
     <p>Summer Collection New Modern Design</p>
     <div class="pro-container">
-      <?php
-      $stmt = $pdo->query("SELECT * FROM products WHERE featured = 1 LIMIT 4");
-      while ($fp = $stmt->fetch()):
-      ?>
+      <?php foreach ($products as $product): ?>
         <div class="pro">
-          <img src="admin/uploads/<?= htmlspecialchars($fp['image']) ?>" alt="<?= htmlspecialchars($fp['name']) ?>" />
+          <img src="admin/uploads/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" />
           <div class="des">
-            <span><?= htmlspecialchars($fp['brand'] ?? 'Brand') ?></span>
-            <h5><?= htmlspecialchars($fp['name']) ?></h5>
+            <span>Category</span>
+            <h5><?php echo htmlspecialchars($product['name']); ?></h5>
             <div class="star">
-              <i class="fas fa-star"></i><i class="fas fa-star"></i>
-              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
               <i class="fas fa-star"></i>
             </div>
-            <h4><?= htmlspecialchars($fp['price']) ?> Taka</h4>
+            <h4><?php echo number_format($product['price'], 2); ?> Taka</h4>
           </div>
-          <a href="sproduct.php?product_id=<?= $fp['id'] ?>"><i class="fa-solid fa-cart-shopping"></i></a>
+          <a href="shop.php"><i class="fa-solid fa-cart-shopping"></i></a>
         </div>
-      <?php endwhile; ?>
+      <?php endforeach; ?>
     </div>
   </section>
   <!-- newsletter section -->
@@ -168,18 +302,21 @@ if (isset($_GET['product_id'])) {
   <!-- Optional: Related Products -->
   <!-- Same HTML from your static page -->
   <script>
-    // Replace main image with small image on click
-    document.addEventListener("DOMContentLoaded", () => {
-      const mainImg = document.getElementById("MainImg");
-      const smallImgs = document.querySelectorAll(".small-img");
+    function toggleDrawer() {
+      const drawer = document.getElementById("drawer");
+      drawer.classList.toggle("open");
+    }
 
-      smallImgs.forEach(img => {
-        img.addEventListener("click", () => {
-          mainImg.src = img.src;
-        });
-      });
+    // Close drawer when clicking outside
+    window.addEventListener("click", function(e) {
+      const drawer = document.getElementById("drawer");
+      const hamburger = document.querySelector(".hamburger");
+      if (!drawer.contains(e.target) && !hamburger.contains(e.target)) {
+        drawer.classList.remove("open");
+      }
     });
   </script>
+
   <script src="script.js"></script>
 </body>
 

@@ -50,7 +50,7 @@ $products = $stmt->fetchAll();
         }
 
         th {
-            background:rgb(3, 171, 31);
+            background: #218838;
             color: white;
         }
 

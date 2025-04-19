@@ -144,7 +144,7 @@ try {
             </div>
             <h4><?php echo number_format($product['price'], 2); ?> Taka</h4>
           </div>
-          <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+          <a href="shop.php"><i class="fa-solid fa-cart-shopping"></i></a>
         </div>
       <?php endforeach; ?>
     </div>
@@ -157,6 +157,31 @@ try {
     <button id="explore" class="normal" onclick="window.location.href = 'shop.php';">Explore More</button>
   </section>
 
+    <!-- Featured Products Section -->
+  <section id="product1" class="section-p1">
+    <h2>New Arrivals</h2>
+    <p>Summer Collection New Modern Design</p>
+    <div class="pro-container">
+      <?php foreach ($products as $product): ?>
+        <div class="pro">
+          <img src="admin/uploads/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" />
+          <div class="des">
+            <span>Category</span>
+            <h5><?php echo htmlspecialchars($product['name']); ?></h5>
+            <div class="star">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <h4><?php echo number_format($product['price'], 2); ?> Taka</h4>
+          </div>
+          <a href="shop.php"><i class="fa-solid fa-cart-shopping"></i></a>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </section>
   <section id="newsletter" class="section-p1 section-m1">
     <div class="newstext">
       <h4>Follow Us For Newsletters</h4>

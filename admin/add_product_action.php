@@ -33,4 +33,3 @@ if (move_uploaded_file($image['tmp_name'], $targetPath)) {
 } else {
     echo "❌ Failed to upload image.";
 }
-?>
