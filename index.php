@@ -157,7 +157,7 @@ try {
     <button id="explore" class="normal" onclick="window.location.href = 'shop.php';">Explore More</button>
   </section>
 
-    <!-- Featured Products Section -->
+  <!-- Featured Products Section -->
   <section id="product1" class="section-p1">
     <h2>New Arrivals</h2>
     <p>Summer Collection New Modern Design</p>

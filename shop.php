@@ -1,10 +1,4 @@
 <?php
-session_start();
-if (!isset($_SESSION['admin'])) {
-  header("Location: login.php");
-  exit();
-}
-
 require 'config.php';
 
 // Fetch all categories for dropdown
