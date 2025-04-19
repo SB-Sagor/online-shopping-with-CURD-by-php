@@ -81,6 +81,18 @@ if (!$product) {
             background: linear-gradient(135deg, #2e7d32, #00c853);
             transform: scale(1.01);
         }
+
+        .back-link {
+            display: inline-block;
+            padding: 5px 20px;
+            text-decoration: none;
+            color: rgb(27, 161, 6);
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -88,8 +100,9 @@ if (!$product) {
     <div class="header">
         <h1>Update Products</h1>
     </div>
-    <div class="form-container">
+    <a class="back-link" href="dashboard.php">← Back to Dashboard</a>
 
+    <div class="form-container">
         <form action="update_product_action.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?= $product['id'] ?>">
 
